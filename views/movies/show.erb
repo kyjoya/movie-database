@@ -1,0 +1,37 @@
+<% load 'helpers.rb' %>
+
+<% movie_data = db_connection do |conn|
+    conn.exec("SELECT movies.id, movies.title, movies.year, movies.rating, genres.name AS genre, studios.name AS studio FROM movies
+        JOIN genres ON movies.genre_id = genres.id
+        LEFT OUTER JOIN studios ON movies.studio_id = studios.id
+        WHERE movies.id = #{movie_id}")
+
+      end %>
+
+<% cast_data = db_connection do |conn|
+  conn.exec("SELECT actors.id, actors.name, cast_members.character FROM cast_members
+        JOIN actors ON cast_members.actor_id = actors.id
+        WHERE cast_members.movie_id = #{movie_id}")
+      end %>
+
+
+<h2><%= movie_data[0]["title"] %></h2>
+<p><%= movie_data[0]["title"] %> was released in <%= movie_data[0]["year"]%> by <%= movie_data[0]["studio"] %>.
+  It is classifed in the <%= movie_data[0]["genre"] %> genre with a rating of <%= movie_data[0]["rating"] %>.
+</p>
+
+<h2>Cast Members:</h2>
+
+<table>
+  <tbody>
+
+    <tr><th>Actor</th><th>Character</th></tr>
+    <% cast_data.each do |person| %>
+      <tr>
+        <td><a href= '/actors/<%= person["id"] %>'><%= person["name"] %></a></td>
+        <td><%= person["character"] %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>

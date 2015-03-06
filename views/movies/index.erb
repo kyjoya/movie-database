@@ -1,0 +1,28 @@
+<% load 'helpers.rb' %>
+
+
+<h2>movies!</h2>
+
+
+
+<table>
+  <% movie_table = db_connection do |conn|
+    conn.exec('SELECT movies.id, movies.title, movies.year, movies.rating, genres.name AS genre, studios.name AS studio FROM movies
+        JOIN genres ON movies.genre_id = genres.id
+        LEFT OUTER JOIN studios ON movies.studio_id = studios.id
+        ORDER BY movies.title ASC')
+    end %>
+  <tbody>
+
+    <tr><th>TITLE</th><th>YEAR</th><th>RATING</th><th>GENRE</th><th>STUDIO</th></tr>
+      <% movie_table.each do |movie| %>
+        <tr>
+          <td><a href = 'movies/<%= movie["id"] %>'><%= movie["title"] %></a></td>
+          <td><%= movie["year"] %></td>
+          <td><%= movie["rating"] %></td>
+          <td><%= movie["genre"] %></td>
+          <td><%= movie["studio"] %></td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>

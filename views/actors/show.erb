@@ -1,0 +1,20 @@
+<% load 'helpers.rb' %>
+
+<% actor_data = db_connection do |conn|
+    conn.exec("SELECT actors.id, name FROM actors
+          WHERE id = #{actor_id}")
+        end %>
+
+<% movies_data = db_connection do |conn|
+  conn.exec("SELECT movies.id, movies.title, actors.name, cast_members.character FROM cast_members
+        JOIN movies ON cast_members.movie_id = movies.id
+        JOIN actors ON cast_members.actor_id = actors.id
+        WHERE cast_members.actor_id = #{actor_id}")
+      end %>
+
+<h2><%= actor_data[0]["name"] %></h2>
+
+<% movies_data.each do |movie| %>
+  <h3><a href='/movies/<%= movie["id"] %>'><%= movie["title"] %></a></h3>
+  <p><%= movie["character"] %></p>
+<% end %>
