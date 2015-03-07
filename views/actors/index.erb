@@ -2,14 +2,9 @@
 
 <h2>actors!</h2>
 
-<% actor_data = db_connection do |conn|
-    conn.exec("SELECT actors.id, name FROM actors
-          ORDER BY name")
-        end %>
-
 <ul>
 
-<% actor_data.each do |actor| %>
+<% actors.each do |actor| %>
   <li><a href='/actors/<%= actor["id"] %>'><%= actor["name"] %></a></li>
 <% end %>
 
