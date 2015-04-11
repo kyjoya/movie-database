@@ -2,12 +2,19 @@
 
 
 <h2>movies!</h2>
+<form label= "search by title">
+  <input type="text" name="search"></input>
+  <input type="submit" value="submit">
+</form>
 
 
+<button><a href="/movies?order=year">By year</a></button>
+<button><a href="/movies?order=rating">By rating</a></button>
+
+<% if !@search_result.nil? %>
 
 <table>
   <tbody>
-
     <tr><th>TITLE</th><th>YEAR</th><th>RATING</th><th>GENRE</th><th>STUDIO</th></tr>
       <% @movie_table.each do |movie| %>
         <tr>
@@ -20,3 +27,21 @@
       <% end %>
   </tbody>
 </table>
+
+
+<% else %>
+
+<table>
+  <tbody>
+    <tr><th>TITLE</th><th>YEAR</th><th>RATING</th><th>GENRE</th><th>STUDIO</th></tr>
+        <tr>
+          <td><%= @search_result[0]["title"] %></a></td>
+          <td><%= @search_result[0]["year"] %></td>
+          <td><%= @search_result[0]["rating"] %></td>
+          <td><%= @search_result[0]["genre"] %></td>
+          <td><%= @search_result[0]["studio"] %></td>
+        </tr>
+  </tbody>
+</table>
+
+<% end %>
